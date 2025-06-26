@@ -30,8 +30,10 @@ public class AccountService {
      * @return: the new account if the addition was succesful
      */
     public Account addAccount(Account account) {
-        // Probably should perform input validation here
-        System.out.println("addAccount in AccountService called");
-        return accountDAO.insertAccount(account);
+        if ((account.getUsername().length() > 0) && (account.getPassword().length() >= 4)) {
+            return accountDAO.insertAccount(account);
+        } else {
+            return null;
+        }
     }
 }
