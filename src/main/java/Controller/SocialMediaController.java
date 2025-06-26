@@ -3,6 +3,7 @@ package Controller;
 import org.h2.engine.User;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.javalin.Javalin;
@@ -21,14 +22,14 @@ public class SocialMediaController {
      * Create controller fields
      */
     AccountService accountService;
-    //MessageService messageService;
+    MessageService messageService;
 
     /* 
      * No args constructor -> New account and message service
      */
     public SocialMediaController() {
         this.accountService = new AccountService();
-        //this.messageService = new MessageService();
+        this.messageService = new MessageService();
     }
     
     /**
@@ -37,6 +38,7 @@ public class SocialMediaController {
      * @return a Javalin app object which defines the behavior of the Javalin controller.
      */
     public Javalin startAPI() {
+        
         Javalin app = Javalin.create();
         //app.get("example-endpoint", this::exampleHandler);
         // POST -> Create a new account (localhost:8080/register)
@@ -71,15 +73,17 @@ public class SocialMediaController {
      * Handler to create a new User
      * Body:
      * Create new object mapper
-     * Use object mapper to get JSON data from body and transform it into a user
-     * Use the service class to add the user
+     * Use object mapper to get JSON data from body and transform it into an account 
+     * Use the service class to add the account
      * If the value is not null, perform the operation
      * Else, return status code 400 (Client side error)
      */
     private void postNewUserHandler(Context context) throws JsonProcessingException {
+        
         ObjectMapper mapper = new ObjectMapper();
         Account account = mapper.readValue(context.body(), Account.class);
         Account addedAccount = accountService.addAccount(account);
+        
         if (addedAccount != null) {
             context.json(mapper.writeValueAsString(addedAccount));
             context.status(200);
@@ -89,17 +93,33 @@ public class SocialMediaController {
     }
 
     /*
-     * Handler to process User log in
+     * Handler to process account log in
      */
-    private void postUserLoginHandler(Context context) {
-        // TODO: Fill this out        
+    private void postUserLoginHandler(Context context) throws JsonProcessingException {
+        
+        ObjectMapper mapper = new ObjectMapper();
+        Account account = mapper.readValue(context.body(), Account.class);
+        Account loggedInAccount = accountService.logIn(account);
+        
+        if (loggedInAccount != null) {
+            context.json(mapper.writeValueAsString(loggedInAccount));
+        } else {
+            context.status(401);
+        }
     }
 
     /*
      * Handler to create a new message
      */
-    private void postNewMessageHandler(Context context) {
-        // TODO: Fill this out
+    private void postNewMessageHandler(Context context) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        Message message = mapper.readValue(context.body(), Message.class);
+        Message addedMessage = messageService.addMessage(message);
+        if (addedMessage != null) {
+            context.json(mapper.writeValueAsString(addedMessage));
+        } else {
+            context.status(400);
+        }
     }
 
     /*

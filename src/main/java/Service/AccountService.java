@@ -5,7 +5,7 @@ import DAO.AccountDAO;
 
 public class AccountService {
     /*
-     * This class private fields
+     * Private fields
      */
     private AccountDAO accountDAO;
 
@@ -25,7 +25,8 @@ public class AccountService {
     }
 
     /*
-     * This method calls the appropiate method in the DAO to create a new user
+     * This method calls the appropiate method in the DAO to create a new account, it also makes
+     * sure the account username is not black and the password is greater than 3 characters
      * @param account: a new Account
      * @return: the new account if the addition was succesful
      */
@@ -35,5 +36,14 @@ public class AccountService {
         } else {
             return null;
         }
+    }
+
+    /*
+     * This method calls the appropiate method in the DAO to process an account logging in
+     * @param account: The account that wants to log in
+     * @return: the account information with its account_id
+     */
+    public Account logIn(Account account) {
+        return accountDAO.logInAccount(account);
     }
 }
