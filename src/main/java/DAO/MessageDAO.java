@@ -114,4 +114,24 @@ public class MessageDAO {
 
         return deletedRows;
     }
+
+    /*
+     * This method will update the message identified by its ID in the database
+     * @param message: the message containing all the data that will replace the values contained by
+     *                 the existing message_id
+     * @return: the updated message
+     */
+    public void updateMessageWhereID(Message message) {
+        Connection connection = ConnectionUtil.getConnection();
+
+        try {
+            String sql = "UPDATE message SET message_text = ? WHERE message_id = ?;";
+            PreparedStatement pS = connection.prepareStatement(sql);
+            pS.setString(1, message.getMessage_text());
+            pS.setInt(2, message.getMessage_id());
+            pS.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 }

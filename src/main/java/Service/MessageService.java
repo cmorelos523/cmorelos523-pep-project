@@ -58,12 +58,6 @@ public class MessageService {
      * @return: the message identified by its id
      */
     public Message getMessageByID(String message_id) {
-        /*
-        // add possible if statement check to see if message is null
-        if (messageDAO.selectMessageWhereID(Integer.parseInt(message_id)) == null) {
-            return null;
-        }
-        */
         return messageDAO.selectMessageWhereID(Integer.parseInt(message_id));
     }
 
@@ -73,5 +67,25 @@ public class MessageService {
      */
     public int deleteMessageByID(String message_id) {
         return messageDAO.deleteMessageWhereID(Integer.parseInt(message_id));
+    }
+
+    /*
+     * This method calls the appropiate method in the DAO to update the message identified by its id
+     * @param message: the message containing all the data that will replace the values contained by
+     *                 the existing message_id
+     * @return: the updated message
+     */
+    public Message updateMessageByID(Message message) {
+        int message_id = message.getMessage_id();
+        
+        if (messageDAO.selectMessageWhereID(message_id) == null) {
+            return null;
+        }
+
+        if ((message.getMessage_text().length() > 0) && (message.getMessage_text().length() <= 255)) {
+            return messageDAO.selectMessageWhereID(message.getMessage_id());
+        } else {
+            return null;
+        }
     }
 }
