@@ -3,6 +3,7 @@ package Service;
 import Model.Message;
 import DAO.AccountDAO;
 import DAO.MessageDAO;
+import java.util.*;
 
 public class MessageService {
     /*
@@ -40,5 +41,37 @@ public class MessageService {
         } else {
             return null;
         }
+    }
+
+    /*
+     * This method calls the selectAllMessages method in the DAO to retrieve all messages
+     * No parameters
+     * @return: the list of all messages created
+     */
+    public List<Message> getAllMessages() {
+        return messageDAO.selectAllMessages();
+    }
+
+    /*
+     * This method calls the method in the DAO to retrieve the message identified by the id
+     * @param message_id: The message's id we want to retrieve
+     * @return: the message identified by its id
+     */
+    public Message getMessageByID(String message_id) {
+        /*
+        // add possible if statement check to see if message is null
+        if (messageDAO.selectMessageWhereID(Integer.parseInt(message_id)) == null) {
+            return null;
+        }
+        */
+        return messageDAO.selectMessageWhereID(Integer.parseInt(message_id));
+    }
+
+    /*
+     * This method calls the method in the DAO to delete the message identified by the id
+     * @param message_id: The message's id we want to delete
+     */
+    public int deleteMessageByID(String message_id) {
+        return messageDAO.deleteMessageWhereID(Integer.parseInt(message_id));
     }
 }

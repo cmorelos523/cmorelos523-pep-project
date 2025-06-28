@@ -1,16 +1,14 @@
 package Controller;
 
 import org.h2.engine.User;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import io.javalin.Javalin;
 import io.javalin.http.Context;
-
 import Service.*;
 import Model.*;
+import java.util.*;
 
 /**
  * TODO: You will need to write your own endpoints and handlers for your controller. The endpoints you will need can be
@@ -126,32 +124,39 @@ public class SocialMediaController {
      * Handler to get all messages
      */
     private void getAllMessagesHandler(Context context) {
-        // TODO: Fill this out
-        context.result("in getAllMessagesHandler...");
+        List<Message> messages = messageService.getAllMessages();
+        context.json(messages);
     }
 
     /*
      * Handler to retrieve a message by its ID
      */
-    private String getMessageByIdHandler(Context context) {
-        // TODO: Fill this out
-        return "";
+    private void getMessageByIdHandler(Context context) {
+        try {
+            context.json(messageService.getMessageByID(context.pathParam("message_id")));
+        } catch (NullPointerException e) {
+            context.status(200);
+        }
+        
     }
 
     /*
      * Handler to delete and possibly retrieve a message by its ID
      */
-    private String deleteMessageByIdHandler(Context context) {
-        // TODO: Fill this out
-        return "";
+    private void deleteMessageByIdHandler(Context context) {
+        try {
+            context.json(messageService.getMessageByID(context.pathParam("message_id")));
+            int deletedRows = messageService.deleteMessageByID(context.pathParam("message_id"));
+        } catch (NullPointerException e) {
+            context.status(200);
+        }
     }
 
     /*
      * Handler to update a message by its ID
      */
-    private String updateMessageByIdHandler(Context context) {
+    private void updateMessageByIdHandler(Context context) {
         // TODO: Fill this out
-        return "";
     }
     
     /*
