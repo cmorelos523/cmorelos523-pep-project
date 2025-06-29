@@ -38,7 +38,6 @@ public class SocialMediaController {
     public Javalin startAPI() {
         
         Javalin app = Javalin.create();
-        //app.get("example-endpoint", this::exampleHandler);
         // POST -> Create a new account (localhost:8080/register)
         app.post("/register", this::postNewUserHandler);
         // POST -> Login into account (localhost:8080/login)
@@ -59,22 +58,8 @@ public class SocialMediaController {
         return app;
     }
 
-    /**
-     * This is an example handler for an example endpoint.
-     * @param context The Javalin Context object manages information about both the HTTP request and response.
-     */
-    private void exampleHandler(Context context) {
-        context.json("sample text");
-    }
-
     /*
      * Handler to create a new User
-     * Body:
-     * Create new object mapper
-     * Use object mapper to get JSON data from body and transform it into an account 
-     * Use the service class to add the account
-     * If the value is not null, perform the operation
-     * Else, return status code 400 (Client side error)
      */
     private void postNewUserHandler(Context context) throws JsonProcessingException {
         
@@ -174,6 +159,11 @@ public class SocialMediaController {
      * Handler to get all the messages sent by a user
      */
     private void getAllMessagesFromUserIdHandler(Context context) {
-        // TODO: Fill this out
+        try {
+            List<Message> messagesFromAccountID = messageService.getMessagesFromAccountID(context.pathParam("account_id"));
+            context.json(messagesFromAccountID);
+        } catch (NullPointerException e) {
+            context.status(200);
+        }
     }
 }

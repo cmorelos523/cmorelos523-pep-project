@@ -89,4 +89,14 @@ public class MessageService {
             return null;
         }
     }
+
+    /*
+     * This method calls the appropiate method in the DAO to retrieve all messages send by a particular user
+     * identified by its account_id
+     * @param account_id: The id of the account we want to get all messages from
+     * @return: The list of all messages sent by that user
+     */
+    public List<Message> getMessagesFromAccountID(String account_id) {
+        return messageDAO.selectAllMessagesWhereAccountID(Integer.parseInt(account_id));
+    }
 }

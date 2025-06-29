@@ -134,4 +134,33 @@ public class MessageDAO {
             System.out.println(e.getMessage());
         }
     }
+
+    /*
+     * This method will retrieve all messages sent by a particular user identified by its account_id
+     * @param account_id: The id of the account we want to get all messages from
+     * @return: The list of all messages sent by that user
+     */
+    public List<Message> selectAllMessagesWhereAccountID(int account_id) {
+        Connection connection = ConnectionUtil.getConnection();
+        List<Message> messagesByAccountID = new ArrayList<>();
+
+        try {
+            String sql = "SELECT * FROM message WHERE posted_by = ?;";
+            PreparedStatement pS = connection.prepareStatement(sql);
+            pS.setInt(1, account_id);
+            ResultSet rS = pS.executeQuery();
+
+            while (rS.next()) {
+                Message curr = new Message(rS.getInt("message_id"), 
+                                           rS.getInt("posted_by"), 
+                                           rS.getString("message_text"), 
+                                           rS.getLong("time_posted_epoch"));
+                messagesByAccountID.add(curr); 
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return messagesByAccountID;
+    }
 }
