@@ -82,8 +82,9 @@ public class MessageService {
             return null;
         }
 
-        if ((message.getMessage_text().length() > 0) && (message.getMessage_text().length() <= 255)) {
-            return messageDAO.selectMessageWhereID(message.getMessage_id());
+        if ((message.getMessage_text().length() > 0) && (message.getMessage_text().length() < 255)) {
+            messageDAO.updateMessageWhereID(message);
+            return messageDAO.selectMessageWhereID(message_id);
         } else {
             return null;
         }
